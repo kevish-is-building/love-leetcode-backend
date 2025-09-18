@@ -2,8 +2,12 @@ import express from "express";
 import dotenv from "dotenv";
 import cookieParser from "cookie-parser";
 import cors from "cors";
+import helmet from "helmet";
+import compression from "compression";
+import morgan from "morgan";
 
 import { ApiResponse } from "./utils/api-response.js";
+import { db } from "./libs/db.js";
 import authRoutes from "./routes/auth.routes.js";
 import problemRoutes from "./routes/problem.routes.js";
 import executionRoutes from "./routes/executionCode.routes.js";
@@ -15,7 +19,7 @@ dotenv.config({
   path: "./.env",
 });
 
-const port = process.env.PORT;
+const port = Number(process.env.PORT) || 3000;
 const app = express();
 // app.use(cors({
 //     // origin: process.env.FRONTEND_URL,
@@ -24,13 +28,17 @@ const app = express();
 // }))
 
 const corsOptions = {
-  origin: "https://loveleetcode.in", // replace with your frontend origin
   credentials: true,
-  methods: ["GET", "POST", "PUT", "DELETE"],
+  methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
   allowedHeaders: ["Content-Type", "Authorization"],
 };
 
 app.use(cors(corsOptions));
+// app.options("*", cors(corsOptions));
+
+app.use(helmet());
+app.use(compression());
+app.use(morgan("dev"));
 
 app.use(express.json());
 app.use(cookieParser());
