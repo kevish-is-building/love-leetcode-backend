@@ -27,8 +27,14 @@ const app = express();
 //     credentials: true
 // }))
 
+const allowedOrigins = [
+  "http://localhost:5173",
+  "https://www.loveleetcode.in",
+];
+
+
 const corsOptions = {
-  origin: "https://loveleetcode.in", // replace with your frontend origin
+  origin: allowedOrigins,
   credentials: true,
   methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
   allowedHeaders: ["Content-Type", "Authorization"],
