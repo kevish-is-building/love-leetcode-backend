@@ -44,7 +44,7 @@ app.use(morgan("dev"));
 app.use(express.json());
 app.use(cookieParser());
 
-app.get("/", (req, res) => {
+app.get("/api", (req, res) => {
   res.status(200).json(new ApiResponse(200, "Sever is running"));
 });
 
