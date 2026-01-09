@@ -55,7 +55,7 @@ app.use("/api/v1/submission", submissionRoutes);
 app.use("/api/v1/playlist", playlistRoutes);
 app.use("/api/v1/admin", adminRoutes);
 
-app.listen(port, () => {
+app.listen(port,"0.0.0.0", () => {
   {
     console.log(`Server is running on port: ${port}`);
   }
