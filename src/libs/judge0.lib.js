@@ -15,9 +15,9 @@ export const submitBatch = async (submissions) => {
     `${process.env.JUDGE0_API_URL}/submissions/batch?base64_encoded=false`,
     { submissions },
     {
-    headers: {
-      Authorization: `Bearer ${process.env.JUDGE0_API_KEY}`
-    },
+    // headers: {
+    //   Authorization: `Bearer ${process.env.JUDGE0_API_KEY}`
+    // },
   }
   );
 
@@ -36,9 +36,9 @@ export const pollBatchResults = async (tokens) => {
           tokens: tokens.join(","),
           base64_encoded: false,
         },
-        headers: {
-          Authorization: `Bearer ${process.env.JUDGE0_API_KEY}`
-        },
+        // headers: {
+        //   Authorization: `Bearer ${process.env.JUDGE0_API_KEY}`
+        // },
       },
     );
 

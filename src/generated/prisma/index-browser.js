@@ -153,7 +153,6 @@ exports.Prisma.SubmissionScalarFieldEnum = {
   id: 'id',
   userId: 'userId',
   problemId: 'problemId',
-  problemTitle: 'problemTitle',
   language: 'language',
   sourceCode: 'sourceCode',
   stdin: 'stdin',
@@ -164,7 +163,8 @@ exports.Prisma.SubmissionScalarFieldEnum = {
   memory: 'memory',
   time: 'time',
   createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
+  updatedAt: 'updatedAt',
+  problemTitle: 'problemTitle'
 };
 
 exports.Prisma.TestCasesResultScalarFieldEnum = {
@@ -187,9 +187,9 @@ exports.Prisma.ProblemSolvedScalarFieldEnum = {
   id: 'id',
   userId: 'userId',
   problemId: 'problemId',
-  language: 'language',
   createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
+  updatedAt: 'updatedAt',
+  language: 'language'
 };
 
 exports.Prisma.PlaylistScalarFieldEnum = {
@@ -205,10 +205,10 @@ exports.Prisma.ProblemInPlaylistScalarFieldEnum = {
   id: 'id',
   playlistId: 'playlistId',
   problemId: 'problemId',
-  title: 'title',
-  difficulty: 'difficulty',
   createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
+  updatedAt: 'updatedAt',
+  difficulty: 'difficulty',
+  title: 'title'
 };
 
 exports.Prisma.SortOrder = {
