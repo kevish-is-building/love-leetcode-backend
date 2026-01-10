@@ -4,6 +4,10 @@ import { getAllSubmissions, getAllSubmissionsForProblem, getUserSubmissionsForPr
 
 const submissionRoutes = express.Router()
 
+submissionRoutes.get("/health-check", (req, res) => {
+  res.status(200).json({ status: "OK", message: "Health check passed for submission" });
+});
+
 submissionRoutes.get("/get-submission/:problemId",authMiddleware,getUserSubmissionsForProblem)
 submissionRoutes.get("/get-all-submissions",authMiddleware,getAllSubmissions)
 submissionRoutes.get("/get-submission-count/:problemId",authMiddleware,getAllSubmissionsForProblem)

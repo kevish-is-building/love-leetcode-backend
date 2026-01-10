@@ -9,6 +9,10 @@ import { authMiddleware } from "../middlewares/auth.middleware.js";
 
 const authRoutes = express.Router();
 
+authRoutes.get("/health-check", (req, res) => {
+  res.status(200).json({ status: "OK", message: "Health check passed for auth" });
+});
+
 authRoutes.post("/register", register);
 authRoutes.post("/login", login);
 authRoutes.post("/logout", authMiddleware, logout);

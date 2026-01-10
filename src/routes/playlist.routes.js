@@ -4,6 +4,10 @@ import { addProblemToPlaylist, createPlaylist, getAllListDetails, getPlaylistDet
 
 const playlistRoutes =  express.Router()
 
+playlistRoutes.get("/health-check", (req, res) => {
+  res.status(200).json({ status: "OK", message: "Health check passed for playlist" });
+});
+
 playlistRoutes.get("/",authMiddleware,getAllListDetails)
 playlistRoutes.get("/:playlistId",authMiddleware,getPlaylistDetails)
 

@@ -26,7 +26,7 @@ const {
   Public,
   getRuntime,
   createParam,
-} = require('./runtime/binary.js')
+} = require('./runtime/library.js')
 
 
 const Prisma = {}
@@ -248,7 +248,7 @@ const config = {
       "fromEnvVar": null
     },
     "config": {
-      "engineType": "binary"
+      "engineType": "library"
     },
     "binaryTargets": [
       {
@@ -266,8 +266,7 @@ const config = {
     "isCustomOutput": true
   },
   "relativeEnvPaths": {
-    "rootEnvPath": null,
-    "schemaEnvPath": "../../../.env"
+    "rootEnvPath": null
   },
   "relativePath": "../../../prisma",
   "clientVersion": "6.9.0",
@@ -313,7 +312,7 @@ config.engineWasm = undefined
 config.compilerWasm = undefined
 
 
-const { warnEnvConflicts } = require('./runtime/binary.js')
+const { warnEnvConflicts } = require('./runtime/library.js')
 
 warnEnvConflicts({
     rootEnvPath: config.relativeEnvPaths.rootEnvPath && path.resolve(config.dirname, config.relativeEnvPaths.rootEnvPath),
@@ -325,12 +324,12 @@ exports.PrismaClient = PrismaClient
 Object.assign(exports, Prisma)
 
 // file annotations for bundling tools to include these files
-path.join(__dirname, "query-engine-darwin-arm64");
-path.join(process.cwd(), "src/generated/prisma/query-engine-darwin-arm64")
+path.join(__dirname, "libquery_engine-darwin-arm64.dylib.node");
+path.join(process.cwd(), "src/generated/prisma/libquery_engine-darwin-arm64.dylib.node")
 
 // file annotations for bundling tools to include these files
-path.join(__dirname, "query-engine-debian-openssl-3.0.x");
-path.join(process.cwd(), "src/generated/prisma/query-engine-debian-openssl-3.0.x")
+path.join(__dirname, "libquery_engine-debian-openssl-3.0.x.so.node");
+path.join(process.cwd(), "src/generated/prisma/libquery_engine-debian-openssl-3.0.x.so.node")
 // file annotations for bundling tools to include these files
 path.join(__dirname, "schema.prisma");
 path.join(process.cwd(), "src/generated/prisma/schema.prisma")

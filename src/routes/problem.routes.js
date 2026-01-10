@@ -1,14 +1,25 @@
 import express from "express";
 import { authMiddleware, checkAdmin } from "../middlewares/auth.middleware.js";
-import {createProblem,getAllProblems,getProblemById,updateProblem,deleteProblem,getAllSolvedProblemsByUser} from "../controllers/problem.controller.js"
+import {
+  createProblem,
+  getAllProblems,
+  getProblemById,
+  updateProblem,
+  deleteProblem,
+  getAllSolvedProblemsByUser,
+} from "../controllers/problem.controller.js";
 
 const problemRoutes = express.Router();
+
+problemRoutes.get("/health-check", (req, res) => {
+  res.status(200).json({ status: "OK", message: "Health check passed for problem" });
+});
 
 problemRoutes.post(
   "/create-problem",
   authMiddleware,
   checkAdmin,
-  createProblem
+  createProblem,
 );
 
 problemRoutes.get("/get-all-problems", authMiddleware, getAllProblems);
@@ -29,6 +40,10 @@ problemRoutes.delete(
   deleteProblem,
 );
 
-problemRoutes.get("/get-solved-problems", authMiddleware, getAllSolvedProblemsByUser);
+problemRoutes.get(
+  "/get-solved-problems",
+  authMiddleware,
+  getAllSolvedProblemsByUser,
+);
 
 export default problemRoutes;

@@ -14,6 +14,7 @@ import executionRoutes from "./routes/executionCode.routes.js";
 import submissionRoutes from "./routes/submission.routes.js";
 import playlistRoutes from "./routes/playlist.routes.js";
 import adminRoutes from "./routes/admin.routes.js";
+import utilsRoutes from "./routes/utilsRoutes.js";
 
 dotenv.config({
   path: "./.env",
@@ -28,7 +29,7 @@ const app = express();
 // }))
 
 const corsOptions = {
-  origin: process.env.FRONTEND_URL, // replace with your frontend origin
+  origin: "http://localhost:3000", // replace with your frontend origin
   credentials: true,
   methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
   allowedHeaders: ["Content-Type", "Authorization"],
@@ -44,7 +45,7 @@ app.use(morgan("dev"));
 app.use(express.json());
 app.use(cookieParser());
 
-app.get("/api", (req, res) => {
+app.get("/", (req, res) => {
   res.status(200).json(new ApiResponse(200, "Sever is running"));
 });
 
@@ -55,7 +56,10 @@ app.use("/api/v1/submission", submissionRoutes);
 app.use("/api/v1/playlist", playlistRoutes);
 app.use("/api/v1/admin", adminRoutes);
 
-app.listen(port,"0.0.0.0", () => {
+// Utils apis
+app.use("/api/v1/utils", utilsRoutes);
+
+app.listen(port, "0.0.0.0", () => {
   {
     console.log(`Server is running on port: ${port}`);
   }
