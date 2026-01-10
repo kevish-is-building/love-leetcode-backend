@@ -14,7 +14,7 @@ import executionRoutes from "./routes/executionCode.routes.js";
 import submissionRoutes from "./routes/submission.routes.js";
 import playlistRoutes from "./routes/playlist.routes.js";
 import adminRoutes from "./routes/admin.routes.js";
-import utilsRoutes from "./routes/utilsRoutes.js";
+import utilsRoutes from "./routes/utils.routes.js";
 
 dotenv.config({
   path: "./.env",

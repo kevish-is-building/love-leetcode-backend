@@ -27,13 +27,17 @@ const createProblem = async (req, res) => {
     referenceSolution,
     hints = "",
     editorial = "",
-
   } = req.body;
 
   if (req.user.role !== "ADMIN") {
     return res
       .status(403)
-      .json(new ApiError(403, "Access Denied - Only Admin is allowed to crate a problem"));
+      .json(
+        new ApiError(
+          403,
+          "Access Denied - Only Admin is allowed to crate a problem",
+        ),
+      );
   }
   try {
     for (const [language, solutionCode] of Object.entries(referenceSolution)) {
@@ -57,7 +61,7 @@ const createProblem = async (req, res) => {
       const tokens = submissionResults.map((res) => res.token);
 
       const results = await pollBatchResults(tokens);
-      
+
       for (let i = 0; i < results.length; i++) {
         const result = results[i];
 
@@ -103,21 +107,19 @@ const createProblem = async (req, res) => {
 
 const getAllProblems = async (req, res) => {
   try {
-   const problems = await db.problem.findMany(
-      {
-        include:{
-          solvedBy:{
-            where:{
-              userId:req.user.id
-            }
-          }
-        }
-      }
-    );
+    const problems = await db.problem.findMany({
+      include: {
+        solvedBy: {
+          where: {
+            userId: req.user.id,
+          },
+        },
+      },
+    });
     if (!problems || problems.length === 0) {
       return res.status(404).json(new ApiError(404, "No problems found"));
     }
-    
+
     res
       .status(200)
       .json(
@@ -134,7 +136,7 @@ const getProblemById = async (req, res) => {
   try {
     const problem = await db.problem.findUnique({
       where: {
-        id:problemId,
+        id: problemId,
       },
     });
 
@@ -153,10 +155,10 @@ const updateProblem = async (req, res) => {
   try {
     const problem = await db.problem.findUnique({
       where: {
-        id:problemId,
+        id: problemId,
       },
     });
-    
+
     if (!problem)
       return res.status(400).json(new ApiError(400, "Problem not found"));
 
@@ -218,11 +220,11 @@ const updateProblem = async (req, res) => {
               );
           }
         }
-        
+
         const newProblem = await db.problem.update({
           where: {
-    id: problemId,
-  },
+            id: problemId,
+          },
           data: {
             title,
             description,
@@ -236,11 +238,11 @@ const updateProblem = async (req, res) => {
             userId: req.user.id,
           },
         });
-        
+
         return res
           .status(200)
           .json(
-            new ApiResponse(200,"Problem updated successfully",newProblem),
+            new ApiResponse(200, "Problem updated successfully", newProblem),
           );
       }
     } catch (error) {
@@ -253,18 +255,18 @@ const updateProblem = async (req, res) => {
 
 const deleteProblem = async (req, res) => {
   const { problemId } = req.params;
-  
+
   try {
-    const problem = await db.problem.findUnique({ where: { id:problemId } });
+    const problem = await db.problem.findUnique({ where: { id: problemId } });
     if (!problem)
       return res.status(404).json(new ApiError(404, "Problem not found"));
-    
-    await db.problem.delete({ where: { id:problemId } });
+
+    await db.problem.delete({ where: { id: problemId } });
 
     res.status(200).json(new ApiResponse(200, "Problem deleted successfully"));
   } catch (error) {
     console.log(error);
-    
+
     res.status(500).json(new ApiError(500, "Error in deleting Problem"));
   }
 };
@@ -280,7 +282,7 @@ const getAllSolvedProblemsByUser = async (req, res) => {
         },
       },
     });
-  
+
     res
       .status(200)
       .json(
@@ -292,7 +294,38 @@ const getAllSolvedProblemsByUser = async (req, res) => {
       );
   } catch (error) {
     console.error("Error while fetching all solved problems:", error);
-    res.status(500).json(500,"Error while fetching all solved problems")
+    res.status(500).json(500, "Error while fetching all solved problems");
+  }
+};
+
+const getProblems = async (req, res) => {
+  try {
+    const problems = await db.problem.findMany({
+      select: {
+        id: true,
+        title: true,
+        difficulty: true,
+        tags: true,
+        solvedBy: {
+          where: {
+            userId: "0d687d01-1771-43c3-acdf-e5b3e603bcdf",
+          },
+        },
+        // this is not required now
+        // problemInPlaylist: {
+        //   where: {
+        //     problemId: "c5ac6214-683f-48a0-a7e9-a95c9d72c4a2",
+        //   },
+        // },
+      },
+    });
+
+    res
+      .status(200)
+      .json(new ApiResponse(200, "Problems fetched successfully", problems));
+  } catch (error) {
+    console.log(error);
+    res.status(500).json(new ApiError(500, "Error in fetching problems"));
   }
 };
 
@@ -304,4 +337,5 @@ export {
   getProblemById,
   updateProblem,
   deleteProblem,
+  getProblems,
 };

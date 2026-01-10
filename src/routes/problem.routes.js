@@ -7,6 +7,7 @@ import {
   updateProblem,
   deleteProblem,
   getAllSolvedProblemsByUser,
+  getProblems,
 } from "../controllers/problem.controller.js";
 
 const problemRoutes = express.Router();
@@ -45,5 +46,8 @@ problemRoutes.get(
   authMiddleware,
   getAllSolvedProblemsByUser,
 );
+
+
+problemRoutes.get("/get-problems", getProblems);
 
 export default problemRoutes;
