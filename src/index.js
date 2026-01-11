@@ -51,7 +51,7 @@ app.get("/", (req, res) => {
 
 app.use("/api/v1/auth", authRoutes);
 app.use("/api/v1/problems", problemRoutes);
-app.use("/api/v1/execution-code", executionRoutes);
+app.use("/api/v1/execute", executionRoutes);
 app.use("/api/v1/submission", submissionRoutes);
 app.use("/api/v1/playlist", playlistRoutes);
 app.use("/api/v1/admin", adminRoutes);
