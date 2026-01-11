@@ -174,7 +174,6 @@ const updateProblem = async (req, res) => {
       referenceSolution,
     } = req.body;
     if (req.user.role !== "ADMIN") {
-      console.log("Only Admin is allowed to update the problem");
       return res
         .status(403)
         .json(new ApiError(403, "Only Admin is allowed to update a problem"));
@@ -265,7 +264,6 @@ const deleteProblem = async (req, res) => {
 
     res.status(200).json(new ApiResponse(200, "Problem deleted successfully"));
   } catch (error) {
-    console.log(error);
 
     res.status(500).json(new ApiError(500, "Error in deleting Problem"));
   }
@@ -321,10 +319,9 @@ const getProblems = async (req, res) => {
     });
 
     res
-      .status(200)
-      .json(new ApiResponse(200, "Problems fetched successfully", problems));
+      .status(206)
+      .json(new ApiResponse(206, "Problems fetched successfully", problems));
   } catch (error) {
-    console.log(error);
     res.status(500).json(new ApiError(500, "Error in fetching problems"));
   }
 };

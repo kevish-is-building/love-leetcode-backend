@@ -120,6 +120,7 @@ model ProblemInPlaylist {
   updatedAt  DateTime   @updatedAt
   difficulty Difficulty @default(EASY)
   title      String
+  // tags       String[]
   playlist   Playlist   @relation(fields: [playlistId], references: [id], onDelete: Cascade)
   problem    Problem    @relation(fields: [problemId], references: [id], onDelete: Cascade)
 
