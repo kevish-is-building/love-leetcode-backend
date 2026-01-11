@@ -12,7 +12,7 @@ export const getJudge0LanguageId = async (language) => {
 export const submitBatch = async (submissions) => {
 
   const { data } = await axios.post(
-    `${process.env.JUDGE0_API_URL}/submissions/batch?base64_encoded=false`,
+    `${process.env.JUDGE0_API_URL || "http://localhost:2358"}/submissions/batch?base64_encoded=false`,
     { submissions },
     {
     // headers: {
@@ -30,7 +30,7 @@ const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 export const pollBatchResults = async (tokens) => {
   while (true) {
     const { data } = await axios.get(
-      `${process.env.JUDGE0_API_URL}/submissions/batch`,
+      `${process.env.JUDGE0_API_URL || "http://localhost:2358"}/submissions/batch`,
       {
         params: {
           tokens: tokens.join(","),

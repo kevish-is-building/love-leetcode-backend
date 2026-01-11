@@ -9,6 +9,6 @@ executionRoutes.get("/health-check", (req, res) => {
 });
 
 executionRoutes.post("/submit", authMiddleware, executeCode);
-executionRoutes.post("/run", authMiddleware, runCode);
+executionRoutes.post("/run",  runCode);
 
 export default executionRoutes;
