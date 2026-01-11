@@ -204,6 +204,31 @@ const removerProblemFromPlaylist = async (req, res) => {
   }
 };
 
+const updatePlaylist = async (req, res) => {
+  const { id } = req.params;
+  const { name, description } = req.body;
+
+  try {
+    const updatedPlaylist = await db.playlist.update({
+      where: {
+        id: id,
+      },
+      data: {
+        name,
+        description,
+      },
+    });
+
+    res
+      .status(200)
+      .json(new ApiResponse(200, "Playlist updated successfully", updatedPlaylist));
+  } catch (error) {
+    res.status(500).json(new ApiError(500, "Failed to update playlist"));
+  }
+}
+
+
+
 export {
   getAllListDetails,
   getPlaylistDetails,
@@ -211,4 +236,5 @@ export {
   addProblemToPlaylist,
   removePlaylist,
   removerProblemFromPlaylist,
+  updatePlaylist
 };
