@@ -192,7 +192,7 @@ const removerProblemFromPlaylist = async (req, res) => {
     const deleteProblem = await db.problemInPlaylist.deleteMany({
       where: {
         playlistId,
-        id: {
+        problemId: {
           in: problemIds,
         },
       },

@@ -1,22 +1,40 @@
-import express from "express"
+import express from "express";
 import { authMiddleware } from "../middlewares/auth.middleware.js";
-import { addProblemToPlaylist, createPlaylist, getAllListDetails, getPlaylistDetails, removerProblemFromPlaylist, removePlaylist, updatePlaylist } from "../controllers/playlist.controller.js";
+import {
+  addProblemToPlaylist,
+  createPlaylist,
+  getAllListDetails,
+  getPlaylistDetails,
+  removerProblemFromPlaylist,
+  removePlaylist,
+  updatePlaylist,
+} from "../controllers/playlist.controller.js";
 
-const playlistRoutes =  express.Router()
+const playlistRoutes = express.Router();
 
 playlistRoutes.get("/health-check", (req, res) => {
-  res.status(200).json({ status: "OK", message: "Health check passed for playlist" });
+  res
+    .status(200)
+    .json({ status: "OK", message: "Health check passed for playlist" });
 });
 
-playlistRoutes.get("/",authMiddleware,getAllListDetails)
-playlistRoutes.get("/:playlistId",authMiddleware,getPlaylistDetails)
+playlistRoutes.get("/", authMiddleware, getAllListDetails);
+playlistRoutes.get("/:playlistId", authMiddleware, getPlaylistDetails);
 
-playlistRoutes.post("/create-playlist",authMiddleware,createPlaylist)
-playlistRoutes.post("/:playlistId/add-problem",authMiddleware,addProblemToPlaylist)
+playlistRoutes.post("/create-playlist", authMiddleware, createPlaylist);
+playlistRoutes.post(
+  "/:playlistId/add-problem",
+  authMiddleware,
+  addProblemToPlaylist,
+);
 
-playlistRoutes.put("/:id",authMiddleware,updatePlaylist)
+playlistRoutes.put("/:id", authMiddleware, updatePlaylist);
 
-playlistRoutes.delete("/:playlistId/remove-problem",authMiddleware,removerProblemFromPlaylist)
-playlistRoutes.delete("/:playlistId",authMiddleware,removePlaylist)
+playlistRoutes.delete(
+  "/:playlistId/remove-problem",
+  authMiddleware,
+  removerProblemFromPlaylist,
+);
+playlistRoutes.delete("/:playlistId", authMiddleware, removePlaylist);
 
-export default playlistRoutes
+export default playlistRoutes;
