@@ -61,7 +61,7 @@ const executeCode = async (req, res) => {
         time: testcase.time ? testcase.time : undefined,
       };
     });
-    console.log("------------", id, title);
+
     // Storing to the submission summary
     const submission = await db.submission.create({
       data: {
@@ -178,35 +178,41 @@ const runCode = async (req, res) => {
     language_id,
     stdin: input,
   }));
-
-  const batchResponse = await submitBatch(submissionBatch);
-  const batchTokens = batchResponse.map((res) => res.token);
-  const batchResults = await pollBatchResults(batchTokens);
-
-  // Checking Answers on all testcases
-  let isAccepted = true;
-
-  const finalResults = batchResults.map((testcase, idx) => {
-    const stdout = testcase.stdout?.trim();
-    const expected_output = expected_outputs[idx]?.trim();
-    const isTestPassed = stdout === expected_output;
-
-    if (!isTestPassed) isAccepted = false;
-
-    return {
-      testCaseNumber: idx + 1,
-      isTestPassed,
-      stdout,
-      expected_output,
-      stderr: testcase.stderr || null,
-      compile_output: testcase.compile_output || null,
-      status: testcase.status.description,
-      memory: testcase.memory ? testcase.memory : undefined,
-      time: testcase.time ? testcase.time : undefined,
-    };
-  });
-
-  res.status(200).json(new ApiResponse(200, "Code executed", finalResults));
+  try {
+    
+    const batchResponse = await submitBatch(submissionBatch);
+    const batchTokens = batchResponse.map((res) => res.token);
+    const batchResults = await pollBatchResults(batchTokens);
+  
+    // Checking Answers on all testcases
+    let isAccepted = true;
+  
+    const finalResults = batchResults.map((testcase, idx) => {
+      const stdout = testcase.stdout?.trim();
+      const expected_output = expected_outputs[idx]?.trim();
+      const isTestPassed = stdout === expected_output;
+  
+      if (!isTestPassed) isAccepted = false;
+  
+      return {
+        testCaseNumber: idx + 1,
+        isTestPassed,
+        stdout,
+        expected_output,
+        stderr: testcase.stderr || null,
+        compile_output: testcase.compile_output || null,
+        status: testcase.status.description,
+        memory: testcase.memory ? testcase.memory : undefined,
+        time: testcase.time ? testcase.time : undefined,
+      };
+    });
+  
+    res.status(200).json(new ApiResponse(200, "Code executed", finalResults));
+  
+  } catch (error) {
+    console.log("Error while running code:", error);
+    res.status(500).json(new ApiError(500, "Error while running code"));
+  }
 };
 
 export { executeCode, runCode };
