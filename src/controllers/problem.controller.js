@@ -273,11 +273,17 @@ const getAllSolvedProblemsByUser = async (req, res) => {
   try {
     const problems = await db.problem.findMany({
       where: {
-        solvedBy: {
-          some: {
-            userId: req.user.id,
-          },
+      solvedBy: {
+        some: {
+        userId: req.user.id,
         },
+      },
+      },
+      select: {
+      id: true,
+      title: true,
+      difficulty: true,
+      tags: true,
       },
     });
 
@@ -306,7 +312,7 @@ const getProblems = async (req, res) => {
         tags: true,
         solvedBy: {
           where: {
-            userId: "0d687d01-1771-43c3-acdf-e5b3e603bcdf",
+            userId: req.user.id,
           },
         },
         // this is not required now
@@ -322,6 +328,7 @@ const getProblems = async (req, res) => {
       .status(206)
       .json(new ApiResponse(206, "Problems fetched successfully", problems));
   } catch (error) {
+    console.log(error)
     res.status(500).json(new ApiError(500, "Error in fetching problems"));
   }
 };

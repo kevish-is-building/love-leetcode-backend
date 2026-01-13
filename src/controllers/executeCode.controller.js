@@ -90,7 +90,7 @@ const executeCode = async (req, res) => {
 
     // if all answers are correct then add it to problem solved for the user
     if (isAccepted) {
-      await db.ProblemSolved.upsert({
+      db.ProblemSolved.upsert({
         where: {
           userId_problemId: {
             userId,
@@ -120,7 +120,7 @@ const executeCode = async (req, res) => {
       time: String(result.time),
     }));
 
-    await db.TestCasesResult.createMany({
+    db.TestCasesResult.createMany({
       data: testCaseResults,
     });
 

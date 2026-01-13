@@ -48,6 +48,6 @@ problemRoutes.get(
 );
 
 
-problemRoutes.get("/get-problems", getProblems);
+problemRoutes.get("/get-problems", authMiddleware, getProblems);
 
 export default problemRoutes;
