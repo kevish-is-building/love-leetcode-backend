@@ -132,6 +132,7 @@ const executeCode = async (req, res) => {
 };
 
 const runCode = async (req, res) => {
+  console.log("one")
   const { code, language_id, stdin, expected_outputs } = req.body;
   let source_code = code;
 
@@ -179,21 +180,24 @@ const runCode = async (req, res) => {
     stdin: input,
   }));
   try {
-    
+      console.log("two", submissionBatch)
     const batchResponse = await submitBatch(submissionBatch);
+    console.log("333333", batchResponse)
     const batchTokens = batchResponse.map((res) => res.token);
+    console.log("444444", batchTokens)
     const batchResults = await pollBatchResults(batchTokens);
-  
+    console.log("555555", batchResults)
+    
     // Checking Answers on all testcases
     let isAccepted = true;
-  
+    
     const finalResults = batchResults.map((testcase, idx) => {
       const stdout = testcase.stdout?.trim();
       const expected_output = expected_outputs[idx]?.trim();
       const isTestPassed = stdout === expected_output;
-  
+      
       if (!isTestPassed) isAccepted = false;
-  
+      
       return {
         testCaseNumber: idx + 1,
         isTestPassed,
@@ -206,7 +210,8 @@ const runCode = async (req, res) => {
         time: testcase.time ? testcase.time : undefined,
       };
     });
-  
+    
+    console.log("=========")
     res.status(200).json(new ApiResponse(200, "Code executed", finalResults));
   
   } catch (error) {

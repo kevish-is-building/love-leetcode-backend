@@ -11,6 +11,7 @@ export const getJudge0LanguageId = async (language) => {
 
 export const submitBatch = async (submissions) => {
   try {
+    console.log("000000====into submit batch")
     const { data } = await axios.post(
       `${
         process.env.JUDGE0_API_URL || "http://localhost:2358"
@@ -22,11 +23,11 @@ export const submitBatch = async (submissions) => {
         // },
       },
     );
-
+    console.log("-1-1-1-1-1", data)
     // data = array or submission token
     return data;
   } catch (error) {
-    console.error("Error submitting batch:", error);
+    console.log("Error submitting batch:", error);
     throw error;
   }
 };
@@ -35,6 +36,7 @@ const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
 export const pollBatchResults = async (tokens) => {
   try {
+    console.log("-2-2-2-2-2")
     while (true) {
       const { data } = await axios.get(
         `${
@@ -46,12 +48,13 @@ export const pollBatchResults = async (tokens) => {
             base64_encoded: false,
           },
           // headers: {
-          //   Authorization: `Bearer ${process.env.JUDGE0_API_KEY}`
-          // },
-        },
-      );
-  
-      const results = data.submissions;
+            //   Authorization: `Bearer ${process.env.JUDGE0_API_KEY}`
+            // },
+          },
+        );
+        
+        const results = data.submissions;
+        console.log("-3-3-3-3-3", results)
   
       const isAllDone = results.every(
         (r) => r.status.id !== 1 && r.status.id !== 2,
@@ -61,7 +64,7 @@ export const pollBatchResults = async (tokens) => {
       await sleep(1000);
     }
   } catch (error) {
-    console.error("Error polling batch results:", error);
+    console.log("Error polling batch results:", error);
     throw error;
   }
 };
