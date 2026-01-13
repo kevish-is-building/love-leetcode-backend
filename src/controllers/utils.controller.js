@@ -44,7 +44,7 @@ const getUserSubmissionCount = async (req, res) => {
 
     res.status(200).json(
       new ApiResponse(200, "Submission count fetched successfully", {
-        count: submissionCount,
+        submissionCount: submissionCount,
       }),
     );
   } catch (error) {
@@ -66,7 +66,7 @@ const getUserTotalSolvedProblemsCount = async (req, res) => {
         new ApiResponse(
           200,
           "Total solved problems count fetched successfully",
-          { count: totalSolvedProblemsCount },
+          { solvedCount: totalSolvedProblemsCount },
         ),
       );
   } catch (error) {
