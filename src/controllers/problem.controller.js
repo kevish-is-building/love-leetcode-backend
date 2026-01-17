@@ -298,37 +298,113 @@ const getAllSolvedProblemsByUser = async (req, res) => {
       );
   } catch (error) {
     console.error("Error while fetching all solved problems:", error);
-    res.status(500).json(500, "Error while fetching all solved problems");
+    res.status(500).json(new ApiError(500, "Error in fetching solved problems"));
   }
 };
 
 const getProblems = async (req, res) => {
   try {
-    const problems = await db.problem.findMany({
-      select: {
-        id: true,
-        title: true,
-        difficulty: true,
-        tags: true,
-        solvedBy: {
-          where: {
-            userId: req.user.id,
+    const {
+      page = 1,
+      limit = 10,
+      difficulty,
+      tags,
+      sortBy = "createdAt",
+      sortOrder = "desc",
+      search,
+      status, // 'solved', 'unsolved', or 'all'
+    } = req.query;
+
+    // Build where clause for filtering
+    const where = {};
+
+    // Filter by difficulty
+    if (difficulty) {
+      where.difficulty = difficulty.toUpperCase();
+    }
+
+    // Filter by tags (comma-separated)
+    if (tags) {
+      const tagArray = tags.split(",").map((tag) => tag.trim());
+      where.tags = {
+        hasSome: tagArray,
+      };
+    }
+
+    // Search by title
+    if (search) {
+      where.title = {
+        contains: search,
+        mode: "insensitive",
+      };
+    }
+
+    // Filter by solved status
+    if (status === "solved") {
+      where.solvedBy = {
+        some: {
+          userId: req.user.id,
+        },
+      };
+    } else if (status === "unsolved") {
+      where.solvedBy = {
+        none: {
+          userId: req.user.id,
+        },
+      };
+    }
+
+    // Calculate pagination
+    const skip = (parseInt(page) - 1) * parseInt(limit);
+    const take = parseInt(limit);
+
+    // Build orderBy clause
+    const orderBy = {};
+    orderBy[sortBy] = sortOrder.toLowerCase();
+
+    // Fetch problems with pagination and sorting
+    const [problems, totalCount] = await Promise.all([
+      db.problem.findMany({
+        where,
+        select: {
+          id: true,
+          title: true,
+          difficulty: true,
+          tags: true,
+          createdAt: true,
+          solvedBy: {
+            where: {
+              userId: req.user.id,
+            },
           },
         },
-        // this is not required now
-        // problemInPlaylist: {
-        //   where: {
-        //     problemId: "c5ac6214-683f-48a0-a7e9-a95c9d72c4a2",
-        //   },
-        // },
-      },
-    });
+        orderBy,
+        skip,
+        take,
+      }),
+      db.problem.count({ where }),
+    ]);
 
-    res
-      .status(206)
-      .json(new ApiResponse(206, "Problems fetched successfully", problems));
+    // Calculate pagination metadata
+    const totalPages = Math.ceil(totalCount / take);
+    const hasNextPage = parseInt(page) < totalPages;
+    const hasPrevPage = parseInt(page) > 1;
+
+    res.status(200).json(
+      new ApiResponse(200, "Problems fetched successfully", {
+        problems,
+        pagination: {
+          currentPage: parseInt(page),
+          totalPages,
+          totalCount,
+          limit: take,
+          hasNextPage,
+          hasPrevPage,
+        },
+      })
+    );
   } catch (error) {
-    console.log(error)
+    console.log(error);
     res.status(500).json(new ApiError(500, "Error in fetching problems"));
   }
 };

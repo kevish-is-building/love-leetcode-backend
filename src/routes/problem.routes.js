@@ -13,7 +13,9 @@ import {
 const problemRoutes = express.Router();
 
 problemRoutes.get("/health-check", (req, res) => {
-  res.status(200).json({ status: "OK", message: "Health check passed for problem" });
+  res
+    .status(200)
+    .json({ status: "OK", message: "Health check passed for problem" });
 });
 
 problemRoutes.post(
@@ -46,7 +48,6 @@ problemRoutes.get(
   authMiddleware,
   getAllSolvedProblemsByUser,
 );
-
 
 problemRoutes.get("/get-problems", authMiddleware, getProblems);
 
