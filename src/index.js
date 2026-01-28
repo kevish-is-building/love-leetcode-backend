@@ -46,7 +46,7 @@ app.use(express.json());
 app.use(cookieParser());
 
 app.get("/", (req, res) => {
-  res.status(200).json(new ApiResponse(200, "Sever is running"));
+  res.status(200).json(new ApiResponse(200, "Sever is running with CI/CD"));
 });
 
 app.use("/api/v1/auth", authRoutes);
