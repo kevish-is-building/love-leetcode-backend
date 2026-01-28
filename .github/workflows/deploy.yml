@@ -20,6 +20,6 @@ jobs:
           username: root
           key: ${{ secrets.EC2_SSH_KEY }}
           script: |
-            cd /root/love-leetcode-backend
+            cd /home/ubuntu/love-leetcode-backend
             git pull
             pm2 restart all
